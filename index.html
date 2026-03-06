@@ -457,6 +457,83 @@
   .card .card-icon { font-size: 22px; margin-bottom: 8px; }
   .card .card-title { font-weight: 600; font-size: 14px; color: var(--black); }
   .card .card-desc { font-size: 12.5px; color: var(--gray-500); margin-top: 3px; }
+
+  /* code blocks */
+  pre {
+    background: var(--gray-900);
+    color: #e4e4e7;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 12px 0;
+  }
+
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+  }
+
+  .code-block {
+    margin: 16px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+  }
+
+  .code-tabs {
+    display: flex;
+    background: var(--gray-100);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0 12px;
+    gap: 4px;
+  }
+
+  .code-tab {
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-500);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .code-tab:hover { color: var(--black); }
+  .code-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+  .code-content { display: none; }
+  .code-content.active { display: block; }
+
+  .code-filename {
+    background: var(--gray-800);
+    color: var(--gray-400);
+    padding: 8px 20px;
+    font-size: 12px;
+    font-family: monospace;
+    border-bottom: 1px solid #333;
+  }
+
+  .content ul { list-style: disc; padding-left: 24px; margin: 12px 0; color: var(--gray-700); }
+  .content ul li { margin: 8px 0; line-height: 1.6; }
+  .content ol { list-style: decimal; padding-left: 24px; margin: 12px 0; color: var(--gray-700); }
+  .content ol li { margin: 8px 0; line-height: 1.6; }
+
+  blockquote { border-left: 3px solid var(--orange); background: var(--orange-light); padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+  blockquote p { color: var(--gray-700); font-size: 14px; margin: 4px 0; }
+
+  .content a { color: var(--orange); text-decoration: underline; transition: opacity 0.15s; }
+  .content a:hover { opacity: 0.8; }
+  .content strong { font-weight: 600; color: var(--black); }
+  .content p { margin: 12px 0; color: var(--gray-700); }
+
+  .content h2 { font-family: 'STIX Two Text', serif; font-size: 24px; font-weight: 700; color: var(--black); margin-top: 32px; margin-bottom: 16px; }
+  .content h3 { font-family: 'STIX Two Text', serif; font-size: 20px; font-weight: 600; color: var(--black); margin-top: 24px; margin-bottom: 12px; }
+  .content h4 { font-weight: 600; font-size: 16px; color: var(--black); margin-top: 20px; margin-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -496,6 +573,9 @@
     <span onclick="goTo('project-docs')" class="nav-sub">📄 Tài Liệu Dự Án</span>
 
     <div class="nav-section">Khác</div>
+    <span onclick="goTo('vercel-analytics')" class="nav-item">
+      <span class="icon">📊</span> Vercel Web Analytics
+    </span>
     <span onclick="goTo('faq')" class="nav-item">
       <span class="icon">❓</span> FAQ
     </span>
@@ -1045,6 +1125,339 @@
       </div>
     </section>
 
+    <!-- ══ VERCEL WEB ANALYTICS ══ -->
+    <section id="vercel-analytics" class="section" style="margin-top:64px;">
+      <div class="page-tag">Analytics</div>
+      <h2 class="page-title" style="font-size:28px; margin-bottom:12px;">Getting started with Vercel Web Analytics</h2>
+      <p style="color:var(--gray-500); margin-bottom:28px;">This guide will help you get started with using Vercel Web Analytics on your project, showing you how to enable it, add the package to your project, deploy your app to Vercel, and view your data in the dashboard.</p>
+
+      <div class="tip">
+        <span>💡</span>
+        <div><strong>Select your framework</strong> to view instructions on using the Vercel Web Analytics in your project.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Prerequisites</div>
+        <ul>
+          <li>A Vercel account. If you don't have one, you can <a href="https://vercel.com/signup" target="_blank">sign up for free</a>.</li>
+          <li>A Vercel project. If you don't have one, you can <a href="https://vercel.com/new" target="_blank">create a new project</a>.</li>
+          <li>The Vercel CLI installed. If you don't have it, you can install it using the following command:</li>
+        </ul>
+
+        <div class="code-block">
+          <div class="code-tabs">
+            <div class="code-tab active" onclick="switchTab(event, 'cli-pnpm')">pnpm</div>
+            <div class="code-tab" onclick="switchTab(event, 'cli-yarn')">yarn</div>
+            <div class="code-tab" onclick="switchTab(event, 'cli-npm')">npm</div>
+            <div class="code-tab" onclick="switchTab(event, 'cli-bun')">bun</div>
+          </div>
+          <div class="code-content active" id="cli-pnpm">
+            <pre><code>pnpm i vercel</code></pre>
+          </div>
+          <div class="code-content" id="cli-yarn">
+            <pre><code>yarn add vercel</code></pre>
+          </div>
+          <div class="code-content" id="cli-npm">
+            <pre><code>npm install vercel</code></pre>
+          </div>
+          <div class="code-content" id="cli-bun">
+            <pre><code>bun add vercel</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Step 1: Enable Web Analytics in Vercel</div>
+        <p>On the Vercel dashboard, select your Project and then click the <strong>Analytics</strong> tab and click <strong>Enable</strong> from the dialog.</p>
+        <div class="tip">
+          <span>💡</span>
+          <div><strong>Note:</strong> Enabling Web Analytics will add new routes (scoped at <code>/_vercel/insights/*</code>) after your next deployment.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Step 2: Add @vercel/analytics to your project</div>
+        <p>Using the package manager of your choice, add the <code>@vercel/analytics</code> package to your project:</p>
+
+        <div class="code-block">
+          <div class="code-tabs">
+            <div class="code-tab active" onclick="switchTab(event, 'install-pnpm')">pnpm</div>
+            <div class="code-tab" onclick="switchTab(event, 'install-yarn')">yarn</div>
+            <div class="code-tab" onclick="switchTab(event, 'install-npm')">npm</div>
+            <div class="code-tab" onclick="switchTab(event, 'install-bun')">bun</div>
+          </div>
+          <div class="code-content active" id="install-pnpm">
+            <pre><code>pnpm add @vercel/analytics</code></pre>
+          </div>
+          <div class="code-content" id="install-yarn">
+            <pre><code>yarn add @vercel/analytics</code></pre>
+          </div>
+          <div class="code-content" id="install-npm">
+            <pre><code>npm install @vercel/analytics</code></pre>
+          </div>
+          <div class="code-content" id="install-bun">
+            <pre><code>bun add @vercel/analytics</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Step 3: Add the Analytics component to your app</div>
+        <p>Choose your framework below to see the specific implementation:</p>
+
+        <div style="margin-top: 24px;">
+          <h3>Next.js (Pages Directory)</h3>
+          <p>The <code>Analytics</code> component is a wrapper around the tracking script, offering more seamless integration with Next.js, including route support.</p>
+          <p>Add the following code to your main app file:</p>
+
+          <div class="code-block">
+            <div class="code-filename">pages/_app.tsx</div>
+            <pre><code>import type { AppProps } from "next/app";
+import { Analytics } from "@vercel/analytics/next";
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    &lt;&gt;
+      &lt;Component {...pageProps} /&gt;
+      &lt;Analytics /&gt;
+    &lt;/&gt;
+  );
+}
+
+export default MyApp;</code></pre>
+          </div>
+
+          <h3 style="margin-top: 32px;">Next.js (App Directory)</h3>
+          <p>Add the following code to the root layout:</p>
+
+          <div class="code-block">
+            <div class="code-filename">app/layout.tsx</div>
+            <pre><code>import { Analytics } from "@vercel/analytics/next";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    &lt;html lang="en"&gt;
+      &lt;head&gt;
+        &lt;title&gt;Next.js&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {children}
+        &lt;Analytics /&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  );
+}</code></pre>
+          </div>
+
+          <h3 style="margin-top: 32px;">Remix</h3>
+          <p>The <code>Analytics</code> component is a wrapper around the tracking script, offering a seamless integration with Remix, including route detection.</p>
+
+          <div class="code-block">
+            <div class="code-filename">app/root.tsx</div>
+            <pre><code>import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+} from "@remix-run/react";
+import { Analytics } from "@vercel/analytics/remix";
+
+export default function App() {
+  return (
+    &lt;html lang="en"&gt;
+      &lt;head&gt;
+        &lt;meta charSet="utf-8" /&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+        &lt;Meta /&gt;
+        &lt;Links /&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;Analytics /&gt;
+        &lt;Outlet /&gt;
+        &lt;ScrollRestoration /&gt;
+        &lt;Scripts /&gt;
+        &lt;LiveReload /&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  );
+}</code></pre>
+          </div>
+
+          <h3 style="margin-top: 32px;">Nuxt</h3>
+          <p>Add the following code to your main component:</p>
+
+          <div class="code-block">
+            <div class="code-filename">app.vue</div>
+            <pre><code>&lt;script setup lang="ts"&gt;
+import { Analytics } from '@vercel/analytics/nuxt';
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;Analytics /&gt;
+  &lt;NuxtPage /&gt;
+&lt;/template&gt;</code></pre>
+          </div>
+
+          <h3 style="margin-top: 32px;">SvelteKit</h3>
+          <p>The <code>injectAnalytics</code> function is a wrapper around the tracking script, offering more seamless integration with SvelteKit, including route support.</p>
+
+          <div class="code-block">
+            <div class="code-filename">src/routes/+layout.ts</div>
+            <pre><code>import { dev } from "$app/environment";
+import { injectAnalytics } from "@vercel/analytics/sveltekit";
+
+injectAnalytics({ mode: dev ? "development" : "production" });</code></pre>
+          </div>
+
+          <h3 style="margin-top: 32px;">Astro</h3>
+          <p>The <code>Analytics</code> component is a wrapper around the tracking script, offering more seamless integration with Astro, including route support.</p>
+
+          <div class="code-block">
+            <div class="code-filename">src/layouts/Base.astro</div>
+            <pre><code>---
+import Analytics from '@vercel/analytics/astro';
+---
+
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;Analytics /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;slot /&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <div class="tip">
+            <span>💡</span>
+            <div><strong>Note:</strong> The <code>Analytics</code> component is available in version <code>@vercel/analytics@1.4.0</code> and later. If you are using an earlier version, you must configure the <code>webAnalytics</code> property in your <code>astro.config.mjs</code> file.</div>
+          </div>
+
+          <h3 style="margin-top: 32px;">React (Create React App)</h3>
+          <p>The <code>Analytics</code> component is a wrapper around the tracking script, offering more seamless integration with React.</p>
+          <div class="tip">
+            <span>💡</span>
+            <div><strong>Note:</strong> When using the plain React implementation, there is no route support.</div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-filename">App.tsx</div>
+            <pre><code>import { Analytics } from "@vercel/analytics/react";
+
+export default function App() {
+  return (
+    &lt;div&gt;
+      {/* ... */}
+      &lt;Analytics /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+          </div>
+
+          <h3 style="margin-top: 32px;">Vue</h3>
+          <p>The <code>Analytics</code> component is a wrapper around the tracking script, offering more seamless integration with Vue.</p>
+          <div class="tip">
+            <span>💡</span>
+            <div><strong>Note:</strong> Route support is automatically enabled if you're using <code>vue-router</code>.</div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-filename">src/App.vue</div>
+            <pre><code>&lt;script setup lang="ts"&gt;
+import { Analytics } from '@vercel/analytics/vue';
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;Analytics /&gt;
+  &lt;!-- your content --&gt;
+&lt;/template&gt;</code></pre>
+          </div>
+
+          <h3 style="margin-top: 32px;">Plain HTML</h3>
+          <p>For plain HTML sites, you can add the following script to your <code>.html</code> files:</p>
+
+          <div class="code-block">
+            <div class="code-filename">index.html</div>
+            <pre><code>&lt;script&gt;
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+&lt;/script&gt;
+&lt;script defer src="/_vercel/insights/script.js"&gt;&lt;/script&gt;</code></pre>
+          </div>
+
+          <div class="tip">
+            <span>💡</span>
+            <div><strong>Note:</strong> When using the HTML implementation, there is no need to install the <code>@vercel/analytics</code> package. However, there is no route support.</div>
+          </div>
+
+          <h3 style="margin-top: 32px;">Other Frameworks</h3>
+          <p>Import the <code>inject</code> function from the package, which will add the tracking script to your app. <strong>This should only be called once in your app, and must run in the client</strong>.</p>
+          <div class="tip">
+            <span>💡</span>
+            <div><strong>Note:</strong> There is no route support with the <code>inject</code> function.</div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-filename">main.ts</div>
+            <pre><code>import { inject } from "@vercel/analytics";
+
+inject();</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Step 4: Deploy your app to Vercel</div>
+        <p>Deploy your app using the following command:</p>
+
+        <div class="code-block">
+          <pre><code>vercel deploy</code></pre>
+        </div>
+
+        <p>If you haven't already, we also recommend connecting your project's Git repository, which will enable Vercel to deploy your latest commits to main without terminal commands.</p>
+
+        <p>Once your app is deployed, it will start tracking visitors and page views.</p>
+
+        <div class="tip">
+          <span>💡</span>
+          <div><strong>Note:</strong> If everything is set up properly, you should be able to see a Fetch/XHR request in your browser's Network tab from <code>/_vercel/insights/view</code> when you visit any page.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Step 5: View your data in the dashboard</div>
+        <p>Once your app is deployed, and users have visited your site, you can view your data in the dashboard.</p>
+        <p>To do so, go to your dashboard, select your project, and click the <strong>Analytics</strong> tab.</p>
+        <p>After a few days of visitors, you'll be able to start exploring your data by viewing and filtering the panels.</p>
+        <p>Users on Pro and Enterprise plans can also add custom events to their data to track user interactions such as button clicks, form submissions, or purchases.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Privacy and Data Compliance</div>
+        <p>Learn more about how Vercel supports privacy and data compliance standards with Vercel Web Analytics.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Next steps</div>
+        <p>Now that you have Vercel Web Analytics set up, you can explore the following topics to learn more:</p>
+        <ul>
+          <li>Learn how to use the <code>@vercel/analytics</code> package</li>
+          <li>Learn how to set up custom events</li>
+          <li>Learn about filtering data</li>
+          <li>Read about privacy and compliance</li>
+          <li>Explore pricing</li>
+          <li>Troubleshooting</li>
+        </ul>
+      </div>
+    </section>
+
+
     <!-- ══ FAQ ══ -->
     <section id="faq" class="section" style="margin-top:64px;">
       <div class="page-tag">FAQ</div>
@@ -1091,6 +1504,31 @@
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+
+  function switchTab(event, tabId) {
+    const codeBlock = event.target.closest('.code-block');
+    const tabs = codeBlock.querySelectorAll('.code-tab');
+    const contents = codeBlock.querySelectorAll('.code-content');
+    
+    tabs.forEach(tab => tab.classList.remove('active'));
+    contents.forEach(content => content.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  function switchTab(event, tabId) {
+    const codeBlock = event.target.closest('.code-block');
+    const tabs = codeBlock.querySelectorAll('.code-tab');
+    const contents = codeBlock.querySelectorAll('.code-content');
+    
+    tabs.forEach(tab => tab.classList.remove('active'));
+    contents.forEach(content => content.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
 
   // Active nav highlight on scroll
   const sections = document.querySelectorAll('section[id]');
